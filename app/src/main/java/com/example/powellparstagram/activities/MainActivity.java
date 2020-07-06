@@ -1,5 +1,6 @@
 package com.example.powellparstagram.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -23,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         queryPosts();
+
+        Intent intent = new Intent(this, PostActivity.class);
+        startActivity(intent);
     }
 
     private void queryPosts() {
