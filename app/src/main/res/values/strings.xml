@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PowellParstagram</string>
+    <string name="submit_post">Submit</string>
+    <string name="take_picture">Take Picture</string>
 </resources>

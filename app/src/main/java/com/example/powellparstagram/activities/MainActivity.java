@@ -1,8 +1,10 @@
-package com.example.powellparstagram;
+package com.example.powellparstagram.activities;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import com.example.powellparstagram.R;
 
 public class MainActivity extends AppCompatActivity {
 
