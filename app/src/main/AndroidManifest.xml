@@ -23,7 +23,6 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <activity android:name=".activities.PostActivity"></activity>
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

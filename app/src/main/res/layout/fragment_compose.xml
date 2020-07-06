@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.PostActivity">
+    tools:context=".fragments.ComposeFragment">
 
     <Button
         android:id="@+id/btnCamera"
@@ -41,11 +41,12 @@
 
     <ImageView
         android:id="@+id/ivPicture"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etDescription"
-        tools:srcCompat="@tools:sample/avatars"
-        android:layout_width="match_parent" />
+        tools:layout_editor_absoluteY="229dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
