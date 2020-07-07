@@ -41,7 +41,6 @@ public class RegisterActivity extends AppCompatActivity {
                 registerUser(username, password);
             }
         });
-
     }
 
     private void registerUser(String username, String password) {
