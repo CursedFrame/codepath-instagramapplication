@@ -65,8 +65,22 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (image != null){
                 Glide.with(context)
                         .load(image.getUrl())
+                        .placeholder(R.drawable.ic_baseline_person_24)
                         .into(ivPostPicture);
             }
+            else {
+                ivPostPicture.setImageResource(R.drawable.ic_baseline_person_24);
+            }
         }
+    }
+
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Post> list) {
+        posts.addAll(list);
+        notifyDataSetChanged();
     }
 }

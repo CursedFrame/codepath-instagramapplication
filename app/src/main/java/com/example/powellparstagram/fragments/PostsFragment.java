@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.adapters.PostsAdapter;
@@ -28,6 +29,7 @@ public class PostsFragment extends Fragment {
     public static final int POST_LIMIT = 20;
 
     private RecyclerView rvPosts;
+    private SwipeRefreshLayout swipeRefreshContainer;
     protected PostsAdapter postsAdapter;
     protected List<Post> allPosts;
 
@@ -45,13 +47,25 @@ public class PostsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        swipeRefreshContainer = (SwipeRefreshLayout) view.findViewById(R.id.scPosts);
+        swipeRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshPosts();
+            }
+        });
+
+        swipeRefreshContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        // RecyclerView and Adapter
         rvPosts = view.findViewById(R.id.rvPosts);
         allPosts = new ArrayList<>();
-
         postsAdapter = new PostsAdapter(getContext(), allPosts);
-
         rvPosts.setAdapter(postsAdapter);
-
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
         queryPosts();
@@ -73,10 +87,24 @@ public class PostsFragment extends Fragment {
                 for (Post post : posts){
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
+
                 allPosts.addAll(posts);
                 postsAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void refreshPosts(){
+        // Clear adapter and posts list
+        postsAdapter.clear();
+        allPosts.clear();
+
+        // Add refreshed posts into allPosts list
+        queryPosts();
+        postsAdapter.addAll(allPosts);
+
+        //
+        swipeRefreshContainer.setRefreshing(false);
     }
 }
 
