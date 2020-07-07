@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -28,6 +29,7 @@ public class PostsFragment extends Fragment {
     public static final String TAG = "PostsFragment";
     public static final int POST_LIMIT = 20;
 
+    private FragmentManager fragmentManager;
     private RecyclerView rvPosts;
     private SwipeRefreshLayout swipeRefreshContainer;
     protected PostsAdapter postsAdapter;
@@ -35,6 +37,10 @@ public class PostsFragment extends Fragment {
 
     public PostsFragment() {
         // Required empty public constructor
+    }
+
+    public PostsFragment(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
     }
 
     @Override
@@ -64,7 +70,7 @@ public class PostsFragment extends Fragment {
         // RecyclerView and Adapter
         rvPosts = view.findViewById(R.id.rvPosts);
         allPosts = new ArrayList<>();
-        postsAdapter = new PostsAdapter(getContext(), allPosts);
+        postsAdapter = new PostsAdapter(getContext(), allPosts, fragmentManager);
         rvPosts.setAdapter(postsAdapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 

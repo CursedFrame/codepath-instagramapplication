@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
 
     private BottomNavigationView bottomNavigationView;
-    final FragmentManager fragmentManager = getSupportFragmentManager();
+    public FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = null;
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
-                        fragment = new PostsFragment();
+                        fragment = new PostsFragment(fragmentManager);
                         break;
                     case R.id.action_compose:
                         fragment = new ComposeFragment();
