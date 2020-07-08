@@ -4,24 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp"
     tools:context=".activities.MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbMain"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/ivInstagramLogoToolbar"
+        android:layout_width="110dp"
+        android:layout_height="43dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tbMain"
+        app:layout_constraintEnd_toStartOf="@+id/ivDirectToolbar"
+        app:layout_constraintStart_toEndOf="@+id/ivCameraToolbar"
+        app:layout_constraintTop_toTopOf="@+id/tbMain"
+        app:srcCompat="@drawable/ic_nav_logo_whiteout_vector_white" />
+
+    <ImageView
+        android:id="@+id/ivCameraToolbar"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tbMain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_photo_camera_24" />
+
+    <ImageView
+        android:id="@+id/ivDirectToolbar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tbMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tbMain"
+        app:srcCompat="@drawable/ic_ufi_new_direct" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="#000000"
+        app:itemIconTint="@color/ic_launcher_background"
+        app:itemTextColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_bottom_navigation" />
+        app:menu="@menu/menu_bottom_navigation"
+        app:labelVisibilityMode="unlabeled">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <FrameLayout
         android:id="@+id/flContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#000000"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tbMain" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

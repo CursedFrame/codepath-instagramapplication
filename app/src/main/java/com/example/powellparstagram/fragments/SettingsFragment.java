@@ -41,16 +41,10 @@ public class SettingsFragment extends Fragment {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseUser.logOut();
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                goLoginActivity();
+
             }
         });
     }
 
-    private void goLoginActivity(){
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
-    }
+
 }

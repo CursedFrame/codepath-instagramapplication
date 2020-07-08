@@ -27,7 +27,7 @@ import java.util.List;
 public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
-    public static final int POST_LIMIT = 20;
+    private int POST_LIMIT;
 
     private FragmentManager fragmentManager;
     private RecyclerView rvPosts;
@@ -39,8 +39,9 @@ public class PostsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public PostsFragment(FragmentManager fragmentManager) {
+    public PostsFragment(FragmentManager fragmentManager, int postLimit) {
         this.fragmentManager = fragmentManager;
+        this.POST_LIMIT = postLimit;
     }
 
     @Override

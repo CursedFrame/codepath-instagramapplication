@@ -1,6 +1,5 @@
 package com.example.powellparstagram.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,11 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.powellparstagram.R;
-import com.example.powellparstagram.activities.MainActivity;
-import com.example.powellparstagram.activities.RegisterActivity;
+import com.example.powellparstagram.activities.LoginActivity;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class LoginFragment extends Fragment {
 
@@ -45,10 +44,14 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        etUsername = view.findViewById(R.id.etUsername);
-        etPassword = view.findViewById(R.id.etPassword);
+        if (ParseUser.getCurrentUser() != null) {
+            ((LoginActivity) getActivity()).goMainActivity();
+        }
+
+        etUsername = view.findViewById(R.id.etUsernameRegister);
+        etPassword = view.findViewById(R.id.etPasswordRegister);
         btnLogin = view.findViewById(R.id.btnLogin);
-        btnRegister = view.findViewById(R.id.btnRegister);
+        btnRegister = view.findViewById(R.id.btnSignUp);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,19 +65,21 @@ public class LoginFragment extends Fragment {
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View v) {
-                Log.i(TAG, "Register button clicked");
-                Intent intent = new Intent(getActivity(), RegisterActivity.class);
-                startActivity(intent);
+                Log.i(TAG, "Login button clicked");
+                String username = etUsername.getText().toString();
+                String password = etPassword.getText().toString();
+                registerUser(username, password);
+
+                if (ParseUser.getCurrentUser() != null) {
+                    ((LoginActivity) getActivity()).goMainActivity();
+                }
             }
         });
-
-        if (ParseUser.getCurrentUser() != null){
-            goMainActivity();
-        }
     }
 
-    private void loginUser(String username, String password){
+    private void loginUser(String username, String password) {
         Log.i(TAG, "User logged in");
 
         // If user has signed in, send user to MainActivity
@@ -85,15 +90,28 @@ public class LoginFragment extends Fragment {
                     Log.e(TAG, "Issue with login", e);
                     return;
                 }
-                goMainActivity();
+                ((LoginActivity)getActivity()).goMainActivity();
                 Toast.makeText(getActivity(), "Successful login", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void goMainActivity() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
-        getActivity().finish();
+    private void registerUser(String username, String password) {
+        // Create the ParseUser
+        ParseUser user = new ParseUser();
+        // Set core properties
+        user.setUsername(username);
+        user.setPassword(password);
+        // Invoke signUpInBackground
+        user.signUpInBackground(new SignUpCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    ((LoginActivity)getActivity()).goMainActivity();
+                }
+                else {
+                    Log.e(TAG, "Issue with register", e);
+                }
+            }
+        });
     }
 }

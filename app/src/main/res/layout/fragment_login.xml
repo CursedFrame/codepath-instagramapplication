@@ -1,52 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".fragments.LoginFragment">
 
     <EditText
-        android:id="@+id/etUsername"
+        android:id="@+id/etUsernameRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:ems="10"
+        android:fontFamily="@font/roboto"
         android:hint="Username"
         android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#AAAAAA"
+        android:textColorLink="#2fbee4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivInstagramLogo" />
 
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etPasswordRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:fontFamily="@font/roboto"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/etUsername"
-        app:layout_constraintStart_toStartOf="@+id/etUsername"
-        app:layout_constraintTop_toBottomOf="@+id/etUsername" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#AAAAAA"
+        android:textColorLink="#2fbee4"
+        app:layout_constraintEnd_toEndOf="@+id/etUsernameRegister"
+        app:layout_constraintStart_toStartOf="@+id/etUsernameRegister"
+        app:layout_constraintTop_toBottomOf="@+id/etUsernameRegister" />
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:backgroundTint="#2fbee4"
+        android:fontFamily="@font/roboto"
         android:text="Log In"
-        app:layout_constraintStart_toStartOf="@+id/etPassword"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/etPasswordRegister"
+        app:layout_constraintStart_toStartOf="@+id/etPasswordRegister"
+        app:layout_constraintTop_toBottomOf="@+id/etPasswordRegister" />
 
     <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnSignUp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:backgroundTint="#6d6d6d"
+        android:fontFamily="@font/roboto"
         android:text="Register"
-        app:layout_constraintEnd_toEndOf="@+id/etPassword"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnLogin"
+        app:layout_constraintStart_toStartOf="@+id/btnLogin"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <ImageView
         android:id="@+id/ivInstagramLogo"
