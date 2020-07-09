@@ -17,9 +17,4 @@
         android:icon="@drawable/ic_action_profile_outline"
         android:title="Profile"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@android:drawable/ic_menu_manage"
-        android:title="Settings"
-        app:showAsAction="always" />
 </menu>

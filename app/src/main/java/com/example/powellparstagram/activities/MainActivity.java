@@ -13,7 +13,6 @@ import com.example.powellparstagram.R;
 import com.example.powellparstagram.fragments.ComposeFragment;
 import com.example.powellparstagram.fragments.PostsFragment;
 import com.example.powellparstagram.fragments.ProfileFragment;
-import com.example.powellparstagram.fragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new ProfileFragment(fragmentManager, POST_LIMIT);
                         menuItem.setIcon(R.drawable.ic_action_profile);
                         break;
-                    case R.id.action_settings:
-                        fragment = new SettingsFragment();
                     default:
                         break;
                 }

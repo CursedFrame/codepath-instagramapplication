@@ -71,6 +71,7 @@ public class ProfileFragment extends Fragment {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.action_change_profile_picture:
+                                goProfilePictureDialogFragment();
                                 return true;
                             case R.id.action_log_out:
                                 ParseUser.logOut();
@@ -78,10 +79,11 @@ public class ProfileFragment extends Fragment {
                                 goLoginActivity();
                                 return true;
                         }
-
                         return false;
                     }
                 });
+                settingsMenu.inflate(R.menu.menu_settings);
+                settingsMenu.show();
             }
         });
 
@@ -122,5 +124,11 @@ public class ProfileFragment extends Fragment {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         startActivity(intent);
         getActivity().finish();
+    }
+
+    private void goProfilePictureDialogFragment() {
+       // FragmentManager fm = getSupportFragmentManager();
+        ProfilePictureDialogFragment profilePictureDialogFragment = ProfilePictureDialogFragment.newInstance("Some Title");
+        profilePictureDialogFragment.show(fragmentManager, "fragment_edit_name");
     }
 }
