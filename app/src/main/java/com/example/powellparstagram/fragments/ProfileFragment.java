@@ -16,13 +16,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.activities.LoginActivity;
 import com.example.powellparstagram.adapters.PostsAdapter;
 import com.example.powellparstagram.objects.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -37,6 +41,8 @@ public class ProfileFragment extends Fragment {
     private FragmentManager fragmentManager;
     private RecyclerView rvPosts;
     private ImageView ivSettings;
+    private ImageView ivProfilePicture;
+    private SwipeRefreshLayout swipeRefreshContainerProfile;
     protected PostsAdapter postsAdapter;
     protected List<Post> allPosts;
 
@@ -61,7 +67,6 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ivSettings = view.findViewById(R.id.ivSettings);
-
         ivSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +89,26 @@ public class ProfileFragment extends Fragment {
                 });
                 settingsMenu.inflate(R.menu.menu_settings);
                 settingsMenu.show();
+            }
+        });
+
+        ivProfilePicture = view.findViewById(R.id.ivProfileImage);
+        ParseFile image = ParseUser.getCurrentUser().getParseFile("profileImage");
+        Glide.with(getContext())
+                .load(image.getUrl())
+                .transform(new CircleCrop())
+                .placeholder(R.drawable.ic_baseline_person_24)
+                .into(ivProfilePicture);
+
+        swipeRefreshContainerProfile = view.findViewById(R.id.scProfile);
+        swipeRefreshContainerProfile.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    refreshProfile();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -130,5 +155,17 @@ public class ProfileFragment extends Fragment {
        // FragmentManager fm = getSupportFragmentManager();
         ProfilePictureDialogFragment profilePictureDialogFragment = ProfilePictureDialogFragment.newInstance("Some Title");
         profilePictureDialogFragment.show(fragmentManager, "fragment_edit_name");
+    }
+
+    private void refreshProfile() throws ParseException {
+        // Refresh user data
+        ParseUser.getCurrentUser().fetch();
+        ParseFile image = ParseUser.getCurrentUser().getParseFile("profileImage");
+        Glide.with(getContext())
+                .load(image.getUrl())
+                .transform(new CircleCrop())
+                .placeholder(R.drawable.ic_baseline_person_24)
+                .into(ivProfilePicture);
+        swipeRefreshContainerProfile.setRefreshing(false);
     }
 }

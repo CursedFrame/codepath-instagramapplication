@@ -114,10 +114,3 @@ public class PostsFragment extends Fragment {
         swipeRefreshContainer.setRefreshing(false);
     }
 }
-
-// STEPS TO REMEMBER FOR RECYCLER VIEW & ADAPTER
-// 1. Create layout for one row in the list
-// 2. Create the adapter
-// 3. Create data source
-// 4. Set the adapter on the recycler view
-// 5. Set the layout manager on the recycler view
