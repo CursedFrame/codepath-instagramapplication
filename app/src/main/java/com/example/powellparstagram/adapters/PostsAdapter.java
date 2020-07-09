@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.fragments.PostDetailFragment;
 import com.example.powellparstagram.objects.Post;
@@ -56,25 +57,32 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         private TextView tvUsername;
         private TextView tvPostDescription;
+        private TextView tvLikeCount;
         private ImageView ivPostPicture;
+        private ImageView ivPostProfilePicture;
         private ConstraintLayout clPost;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvPostDescription = itemView.findViewById(R.id.tvPostDescription);
+            tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
             ivPostPicture = itemView.findViewById(R.id.ivPostPicture);
+            ivPostProfilePicture = itemView.findViewById(R.id.ivPostProfilePicture);
             clPost = itemView.findViewById(R.id.clPost);
         }
 
         public void bind(final Post post) {
             tvUsername.setText(post.getUser().getUsername());
             tvPostDescription.setText(post.getDescription());
+            String numLikes = post.getLikeCount().toString();
+            tvLikeCount.setText(numLikes + " likes");
 
-            ParseFile image = post.getImage();
-            if (image != null){
+            // Bind post image
+            ParseFile postImage = post.getImage();
+            if (postImage != null){
                 Glide.with(context)
-                        .load(image.getUrl())
+                        .load(postImage.getUrl())
                         .placeholder(R.drawable.ic_baseline_person_24)
                         .into(ivPostPicture);
             }
@@ -82,6 +90,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 ivPostPicture.setImageResource(R.drawable.ic_baseline_person_24);
             }
 
+            // Bind profile image
+            ParseFile profileImage = post.getUser().getParseFile("profileImage");
+            if (profileImage != null) {
+                Glide.with(context)
+                        .load(profileImage.getUrl())
+                        .transform(new CircleCrop())
+                        .placeholder(R.drawable.ic_baseline_person_24)
+                        .into(ivPostProfilePicture);
+            }
+            else {
+                ivPostProfilePicture.setImageResource(R.drawable.ic_baseline_person_24);
+            }
+            // Bind onClickListener to clPost to open PostDetailFragment
             clPost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

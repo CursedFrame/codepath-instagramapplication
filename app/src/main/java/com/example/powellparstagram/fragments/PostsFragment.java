@@ -16,22 +16,27 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.adapters.PostsAdapter;
+import com.example.powellparstagram.listeners.EndlessRecyclerViewScrollListener;
 import com.example.powellparstagram.objects.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
     private int POST_LIMIT;
+    private Date lastPostDate;
 
     private FragmentManager fragmentManager;
+    private LinearLayoutManager linearLayoutManager;
     private RecyclerView rvPosts;
     private SwipeRefreshLayout swipeRefreshContainer;
+    private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     protected PostsAdapter postsAdapter;
     protected List<Post> allPosts;
 
@@ -70,19 +75,53 @@ public class PostsFragment extends Fragment {
 
         // RecyclerView and Adapter
         rvPosts = view.findViewById(R.id.rvPosts);
+        linearLayoutManager  = new LinearLayoutManager(getContext());
         allPosts = new ArrayList<>();
         postsAdapter = new PostsAdapter(getContext(), allPosts, fragmentManager);
         rvPosts.setAdapter(postsAdapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvPosts.setLayoutManager(linearLayoutManager);
+
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadMorePosts();
+            }
+        };
+
+        rvPosts.addOnScrollListener(endlessRecyclerViewScrollListener);
 
         queryPosts();
+    }
+
+    private void loadMorePosts() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setLimit(1);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
+        query.whereLessThan("createdAt", lastPostDate);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null){
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+                for (Post post : posts){
+                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                }
+
+                allPosts.addAll(posts);
+                postsAdapter.notifyDataSetChanged();
+                lastPostDate = allPosts.get(allPosts.size() - 1).getCreatedAt();
+            }
+        });
     }
 
     protected void queryPosts() {
         // Specify which class to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(POST_LIMIT);
+        query.setLimit(1);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -97,6 +136,7 @@ public class PostsFragment extends Fragment {
 
                 allPosts.addAll(posts);
                 postsAdapter.notifyDataSetChanged();
+                lastPostDate = allPosts.get(allPosts.size() - 1).getCreatedAt();
             }
         });
     }

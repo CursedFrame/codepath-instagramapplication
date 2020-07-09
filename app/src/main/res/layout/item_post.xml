@@ -5,38 +5,95 @@
     android:id="@+id/clPost"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:paddingBottom="16dp">
+
+    <TextView
+        android:id="@+id/tvLikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLike"
+        tools:text="10 likes" />
+
+    <ImageView
+        android:id="@+id/ivDirect"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/ivComment"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostPicture"
+        app:srcCompat="@drawable/ic_direct" />
+
+    <ImageView
+        android:id="@+id/ivComment"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/ivLike"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostPicture"
+        app:srcCompat="@drawable/ic_ufi_comment" />
+
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostPicture"
+        app:srcCompat="@drawable/ic_ufi_heart" />
 
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/roboto"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#FFFFFF"
+        android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPostProfilePicture"
+        app:layout_constraintStart_toEndOf="@+id/ivPostProfilePicture"
+        app:layout_constraintTop_toTopOf="@+id/ivPostProfilePicture"
         tools:text="powell_njp" />
 
     <ImageView
         android:id="@+id/ivPostPicture"
         android:layout_width="0dp"
         android:layout_height="300dp"
+        android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+        app:layout_constraintTop_toBottomOf="@+id/ivPostProfilePicture"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvPostDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostPicture"
+        app:layout_constraintTop_toBottomOf="@+id/tvLikeCount"
         tools:text="Hello World!" />
+
+    <ImageView
+        android:id="@+id/ivPostProfilePicture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
