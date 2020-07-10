@@ -2,6 +2,7 @@ package com.example.powellparstagram.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +20,25 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.fragments.PostDetailFragment;
 import com.example.powellparstagram.objects.Post;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
+    public static final String TAG = "PostsAdapter";
+
     private Context context;
     private List<Post> posts;
     private FragmentManager fragmentManager;
+    private ParseUser currentUser = ParseUser.getCurrentUser();
 
     public PostsAdapter(Context context, List<Post> posts, FragmentManager fragmentManager) {
         this.context = context;
@@ -60,7 +71,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvLikeCount;
         private ImageView ivPostPicture;
         private ImageView ivPostProfilePicture;
+        private ImageView ivLike;
         private ConstraintLayout clPost;
+        private boolean postLiked;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +82,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
             ivPostPicture = itemView.findViewById(R.id.ivPostPicture);
             ivPostProfilePicture = itemView.findViewById(R.id.ivPostProfilePicture);
+            ivLike = itemView.findViewById(R.id.ivLike);
             clPost = itemView.findViewById(R.id.clPost);
         }
 
@@ -102,6 +116,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             else {
                 ivPostProfilePicture.setImageResource(R.drawable.ic_baseline_person_24);
             }
+
             // Bind onClickListener to clPost to open PostDetailFragment
             clPost.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -112,6 +127,54 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     fragment.setArguments(bundle);
 
                     fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                }
+            });
+
+            ParseQuery<ParseObject> queryPosts = currentUser.getRelation("likedPosts").getQuery();
+            queryPosts.whereEqualTo("objectId", post.getObjectId());
+            queryPosts.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    if (e != null){
+                        Log.e(TAG, "Issue with getting post", e);
+                        ivLike.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ufi_heart));
+                        postLiked = false;
+                        return;
+                    }
+                    ivLike.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ufi_heart_active));
+                    postLiked = true;
+                }
+            });
+
+            // Bind onClickListener to ivLike to increment/decrement like count and update post like count
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final ParseRelation<Post> parseRelation = currentUser.getRelation("likedPosts");
+                    if (!postLiked) {
+                        post.setLikeCount(post.getLikeCount().intValue() + 1);
+                        post.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                parseRelation.add(post);
+                                currentUser.saveInBackground();
+                                ivLike.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ufi_heart_active));
+                            }
+                        });
+
+                    }
+                    else {
+                        post.setLikeCount(post.getLikeCount().intValue() - 1);
+                        post.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                parseRelation.remove(post);
+                                currentUser.saveInBackground();
+                                ivLike.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ufi_heart));
+                            }
+                        });
+                    }
+                    querySinglePost(post, getAdapterPosition());
                 }
             });
         }
@@ -125,5 +188,23 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public void addAll(List<Post> list) {
         posts.addAll(list);
         notifyDataSetChanged();
+    }
+
+    private void querySinglePost(Post post, final int position){
+        // Specify which class to query
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.whereEqualTo("objectId", post.getObjectId());
+        query.getFirstInBackground(new GetCallback<Post>() {
+            @Override
+            public void done(Post object, ParseException e) {
+                if (e != null){
+                    Log.e(TAG, "Issue with getting post", e);
+                }
+                posts.remove(position);
+                posts.add(position, object);
+                notifyItemChanged(position);
+            }
+        });
     }
 }

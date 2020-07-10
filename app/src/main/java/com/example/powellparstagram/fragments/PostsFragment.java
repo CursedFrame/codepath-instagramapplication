@@ -96,7 +96,7 @@ public class PostsFragment extends Fragment {
     private void loadMorePosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(1);
+        query.setLimit(POST_LIMIT);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.whereLessThan("createdAt", lastPostDate);
         query.findInBackground(new FindCallback<Post>() {
@@ -121,7 +121,7 @@ public class PostsFragment extends Fragment {
         // Specify which class to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(1);
+        query.setLimit(POST_LIMIT);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
             @Override
