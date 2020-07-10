@@ -2,49 +2,111 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clDetailPost"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.PostDetailFragment">
+    android:layout_height="wrap_content"
+    android:paddingBottom="16dp">
+
+    <TextView
+        android:id="@+id/tvDetailTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/roboto"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivDetailPostPicture"
+        tools:text="2 hours ago" />
+
+    <TextView
+        android:id="@+id/tvDetailLikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivDetailLike"
+        tools:text="10 likes" />
+
+    <ImageView
+        android:id="@+id/ivDetailDirect"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/ivDetailComment"
+        app:layout_constraintTop_toBottomOf="@+id/ivDetailPostPicture"
+        app:srcCompat="@drawable/ic_direct" />
+
+    <ImageView
+        android:id="@+id/ivDetailComment"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/ivDetailLike"
+        app:layout_constraintTop_toBottomOf="@+id/ivDetailPostPicture"
+        app:srcCompat="@drawable/ic_ufi_comment" />
+
+    <ImageView
+        android:id="@+id/ivDetailLike"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivDetailPostPicture"
+        app:srcCompat="@drawable/ic_ufi_heart" />
 
     <TextView
         android:id="@+id/tvDetailUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/roboto"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="njp3003" />
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivDetailPostProfilePicture"
+        app:layout_constraintStart_toEndOf="@+id/ivDetailPostProfilePicture"
+        app:layout_constraintTop_toTopOf="@+id/ivDetailPostProfilePicture"
+        tools:text="powell_njp" />
 
     <ImageView
-        android:id="@+id/ivDetailPicture"
+        android:id="@+id/ivDetailPostPicture"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDetailUsername"
-        tools:src="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/ivDetailPostProfilePicture"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tvDetailTimestamp"
+        android:id="@+id/tvDetailPostDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivDetailPicture"
-        tools:text="13 minutes ago" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDetailLikeCount"
+        tools:text="Hello World!" />
 
-    <TextView
-        android:id="@+id/tvDetailDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+    <ImageView
+        android:id="@+id/ivDetailPostProfilePicture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDetailTimestamp"
-        tools:text="description" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>

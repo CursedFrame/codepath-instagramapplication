@@ -2,6 +2,7 @@ package com.example.powellparstagram;
 
 import android.app.Application;
 
+import com.example.powellparstagram.objects.Comment;
 import com.example.powellparstagram.objects.Post;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -13,7 +14,7 @@ public class ParseApplication extends Application {
 
         // Register your parse models
         ParseObject.registerSubclass(Post.class);
-
+        ParseObject.registerSubclass(Comment.class);
 
         // set applicationId, and server server based on the values in the Heroku settings.
         // clientKey is not needed unless explicitly configured

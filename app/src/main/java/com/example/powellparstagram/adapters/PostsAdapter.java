@@ -121,7 +121,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             clPost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment fragment = new PostDetailFragment();
+                    Fragment fragment = new PostDetailFragment(fragmentManager);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("post", post);
                     fragment.setArguments(bundle);
@@ -130,6 +130,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 }
             });
 
+            // Change liked icon whether liked or not
             ParseQuery<ParseObject> queryPosts = currentUser.getRelation("likedPosts").getQuery();
             queryPosts.whereEqualTo("objectId", post.getObjectId());
             queryPosts.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -158,7 +159,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                             public void done(ParseException e) {
                                 parseRelation.add(post);
                                 currentUser.saveInBackground();
-                                ivLike.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ufi_heart_active));
                             }
                         });
 
@@ -170,7 +170,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                             public void done(ParseException e) {
                                 parseRelation.remove(post);
                                 currentUser.saveInBackground();
-                                ivLike.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_ufi_heart));
                             }
                         });
                     }
@@ -190,8 +189,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    // Refresh single post after modifying
     private void querySinglePost(Post post, final int position){
-        // Specify which class to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.whereEqualTo("objectId", post.getObjectId());

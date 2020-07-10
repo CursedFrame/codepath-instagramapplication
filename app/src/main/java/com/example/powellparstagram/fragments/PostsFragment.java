@@ -150,7 +150,6 @@ public class PostsFragment extends Fragment {
         queryPosts();
         postsAdapter.addAll(allPosts);
 
-        //
         swipeRefreshContainer.setRefreshing(false);
     }
 }
