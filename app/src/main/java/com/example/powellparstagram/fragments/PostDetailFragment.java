@@ -14,11 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.powellparstagram.R;
+import com.example.powellparstagram.adapters.CommentsAdapter;
+import com.example.powellparstagram.objects.Comment;
 import com.example.powellparstagram.objects.Post;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -28,9 +33,13 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PostDetailFragment extends Fragment {
 
     public static final String TAG = "PostDetailFragment";
+    public static final int COMMENT_LIMIT = 20;
     private ParseUser currentUser = ParseUser.getCurrentUser();
 
     private TextView tvDetailUsername;
@@ -42,6 +51,9 @@ public class PostDetailFragment extends Fragment {
     private ImageView ivDetailLike;
     private ImageView ivDetailComment;
     private FragmentManager fragmentManager;
+    private CommentsAdapter commentsAdapter;
+    private RecyclerView rvComments;
+    private List<Comment> comments;
     private boolean postLiked;
     private Post post;
 
@@ -74,10 +86,17 @@ public class PostDetailFragment extends Fragment {
         ivDetailProfilePicture = view.findViewById(R.id.ivDetailPostProfilePicture);
         ivDetailLike = view.findViewById(R.id.ivDetailLike);
         ivDetailComment = view.findViewById(R.id.ivDetailComment);
+        rvComments = view.findViewById(R.id.rvComments);
 
         tvDetailUsername.setText(post.getUser().getUsername());
         tvDetailTimestamp.setText(post.getCreatedAt().toString());
         tvDetailPostDescription.setText(post.getDescription());
+
+        comments = new ArrayList<>();
+        commentsAdapter = new CommentsAdapter(getContext(), comments);
+
+        rvComments.setAdapter(commentsAdapter);
+        rvComments.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
         String numLikes = post.getLikeCount().toString();
@@ -161,6 +180,8 @@ public class PostDetailFragment extends Fragment {
                 goCommentDialogFragment();
             }
         });
+
+        getPostComments();
     }
 
     private void querySinglePost(){
@@ -193,5 +214,24 @@ public class PostDetailFragment extends Fragment {
         CommentDialogFragment commentDialogFragment = CommentDialogFragment.newInstance("Some Title");
         commentDialogFragment.setArguments(bundle);
         commentDialogFragment.show(fragmentManager, "fragment_edit_name");
+    }
+
+    private void getPostComments() {
+        post.getRelation("comments").getQuery()
+                .orderByDescending(Comment.KEY_CREATED_AT)
+                .include(Comment.KEY_USER)
+                .include(Comment.KEY_POST)
+                .findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> objects, ParseException e) {
+                        if (e != null){
+                            Log.e(TAG, "Error loading post comments", e);
+                        }
+                        for (ParseObject object : objects){
+                            comments.add(((Comment) object));
+                        }
+                        commentsAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 }
