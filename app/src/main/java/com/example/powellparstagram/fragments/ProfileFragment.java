@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.activities.LoginActivity;
-import com.example.powellparstagram.adapters.PostsAdapter;
+import com.example.powellparstagram.adapters.ProfilePostsAdapter;
 import com.example.powellparstagram.objects.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -43,7 +43,7 @@ public class ProfileFragment extends Fragment {
     private ImageView ivSettings;
     private ImageView ivProfilePicture;
     private SwipeRefreshLayout swipeRefreshContainerProfile;
-    protected PostsAdapter postsAdapter;
+    protected ProfilePostsAdapter profilePostsAdapter;
     protected List<Post> allPosts;
 
     public ProfileFragment() {
@@ -115,9 +115,9 @@ public class ProfileFragment extends Fragment {
         // RecyclerView and Adapter
         rvPosts = view.findViewById(R.id.rvProfile);
         allPosts = new ArrayList<>();
-        postsAdapter = new PostsAdapter(getContext(), allPosts, fragmentManager);
-        rvPosts.setAdapter(postsAdapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        profilePostsAdapter = new ProfilePostsAdapter(getContext(), allPosts, fragmentManager);
+        rvPosts.setAdapter(profilePostsAdapter);
+        rvPosts.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
         queryPosts();
     }
@@ -140,7 +140,7 @@ public class ProfileFragment extends Fragment {
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
                 allPosts.addAll(posts);
-                postsAdapter.notifyDataSetChanged();
+                profilePostsAdapter.notifyDataSetChanged();
             }
         });
     }

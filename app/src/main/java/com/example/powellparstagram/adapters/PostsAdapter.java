@@ -80,7 +80,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvPostDescription = itemView.findViewById(R.id.tvPostDescription);
             tvLikeCount = itemView.findViewById(R.id.tvLikeCount);
-            ivPostPicture = itemView.findViewById(R.id.ivPostPicture);
+            ivPostPicture = itemView.findViewById(R.id.ivProfilePostPicture);
             ivPostProfilePicture = itemView.findViewById(R.id.ivPostProfilePicture);
             ivLike = itemView.findViewById(R.id.ivLike);
             clPost = itemView.findViewById(R.id.clPost);
