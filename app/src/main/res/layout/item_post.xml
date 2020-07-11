@@ -7,6 +7,40 @@
     android:layout_height="wrap_content"
     android:paddingBottom="16dp">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clProfileContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/ivPostProfilePicture"
+            app:layout_constraintStart_toEndOf="@+id/ivPostProfilePicture"
+            app:layout_constraintTop_toTopOf="@+id/ivPostProfilePicture"
+            tools:text="powell_njp" />
+
+        <ImageView
+            android:id="@+id/ivPostProfilePicture"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/tvLikeCount"
         android:layout_width="wrap_content"
@@ -50,20 +84,6 @@
         app:layout_constraintTop_toBottomOf="@+id/ivProfilePostPicture"
         app:srcCompat="@drawable/ic_ufi_heart" />
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/roboto"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/ivPostProfilePicture"
-        app:layout_constraintStart_toEndOf="@+id/ivPostProfilePicture"
-        app:layout_constraintTop_toTopOf="@+id/ivPostProfilePicture"
-        tools:text="powell_njp" />
 
     <ImageView
         android:id="@+id/ivProfilePostPicture"
@@ -72,8 +92,9 @@
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivPostProfilePicture"
+        app:layout_constraintTop_toBottomOf="@+id/clProfileContainer"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -88,13 +109,5 @@
         app:layout_constraintTop_toBottomOf="@+id/tvLikeCount"
         tools:text="Hello World!" />
 
-    <ImageView
-        android:id="@+id/ivPostProfilePicture"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

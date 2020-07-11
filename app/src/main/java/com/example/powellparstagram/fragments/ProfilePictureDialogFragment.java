@@ -40,7 +40,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfilePictureDialogFragment extends DialogFragment {
 
-    public static final String TAG = "ProfilePictureFragment";
+    public static final String TAG = "ProfilePicDialogFrgmnt"; // Tag in this case can only be 23 character max
     public final static int PICK_PHOTO_CODE = 1046;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "profile_photo.jpg";
@@ -53,9 +53,7 @@ public class ProfilePictureDialogFragment extends DialogFragment {
 
 
     public ProfilePictureDialogFragment() {
-        // Empty constructor is required for DialogFragment
-        // Make sure not to add arguments to the constructor
-        // Use `newInstance` instead as shown below
+
     }
 
     public static ProfilePictureDialogFragment newInstance(String title) {
@@ -123,8 +121,6 @@ public class ProfilePictureDialogFragment extends DialogFragment {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             // Bring up gallery to select a photo
             startActivityForResult(intent, PICK_PHOTO_CODE);
@@ -134,13 +130,10 @@ public class ProfilePictureDialogFragment extends DialogFragment {
     public Bitmap loadFromUri(Uri photoUri) {
         Bitmap image = null;
         try {
-            // check version of Android on device
             if(Build.VERSION.SDK_INT > 27){
-                // on newer versions of Android, use the new decodeBitmap method
                 ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
                 image = ImageDecoder.decodeBitmap(source);
             } else {
-                // support older versions of Android by using getBitmap
                 image = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
             }
         } catch (IOException e) {
@@ -152,17 +145,13 @@ public class ProfilePictureDialogFragment extends DialogFragment {
     public void onLaunchCamera(View view) {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         // Create a File reference for future access
         photoFile = getPhotoFileUri(photoFileName);
 
-        // wrap File object into a content provider
-        // required for API >= 24
-        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
         Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             // Start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -171,8 +160,6 @@ public class ProfilePictureDialogFragment extends DialogFragment {
 
     public File getPhotoFileUri(String fileName) {
         // Get safe storage directory for photos
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
-        // This way, we don't need to request external read/write runtime permissions.
         File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         // Create the storage directory if it does not exist
@@ -194,20 +181,16 @@ public class ProfilePictureDialogFragment extends DialogFragment {
             // Load the image located at photoUri into selectedImage
             Bitmap selectedImage = loadFromUri(photoUri);
 
-
             // Load the selected image into a preview
             ivPreview = (ImageView) getView().findViewById(R.id.ivPicturePreview);
             ivPreview.setImageBitmap(selectedImage);
         }
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                // RESIZE BITMAP, see section below
-                // Load the taken image into a preview
                 ivPreview = (ImageView) getView().findViewById(R.id.ivPicturePreview);
                 ivPreview.setImageBitmap(takenImage);
-            } else { // Result was a failure
+            } else {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }

@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.fragments.PostDetailFragment;
+import com.example.powellparstagram.fragments.ProfileFragment;
 import com.example.powellparstagram.objects.Post;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -34,7 +35,7 @@ import java.util.List;
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     public static final String TAG = "PostsAdapter";
-
+    public static final int POST_LIMIT = 20;
     private Context context;
     private List<Post> posts;
     private FragmentManager fragmentManager;
@@ -73,6 +74,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivPostProfilePicture;
         private ImageView ivLike;
         private ConstraintLayout clPost;
+        private ConstraintLayout clProfileContainer;
         private boolean postLiked;
 
         public ViewHolder(@NonNull View itemView) {
@@ -84,6 +86,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivPostProfilePicture = itemView.findViewById(R.id.ivPostProfilePicture);
             ivLike = itemView.findViewById(R.id.ivLike);
             clPost = itemView.findViewById(R.id.clPost);
+            clProfileContainer = itemView.findViewById(R.id.clProfileContainer);
         }
 
         public void bind(final Post post) {
@@ -117,16 +120,24 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 ivPostProfilePicture.setImageResource(R.drawable.ic_baseline_person_24);
             }
 
-            // Bind onClickListener to clPost to open PostDetailFragment
+            // When post is clicked, go to post
             clPost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment fragment = new PostDetailFragment(fragmentManager);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("post", post);
-                    fragment.setArguments(bundle);
 
-                    fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                    PostDetailFragment postDetailFragment = PostDetailFragment.newInstance();
+                    postDetailFragment.setArguments(bundle);
+                    fragmentManager.beginTransaction().replace(R.id.flContainer, postDetailFragment).commit();
+                }
+            });
+
+            // When profile picture or username is clicked, go to user's profile
+            clProfileContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goUserProfile(post);
                 }
             });
 
@@ -147,7 +158,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 }
             });
 
-            // Bind onClickListener to ivLike to increment/decrement like count and update post like count
+            // When click on like image, increments/decrements like count and updates post like count
             ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -205,5 +216,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 notifyItemChanged(position);
             }
         });
+    }
+
+    private void goUserProfile(Post post){
+        Fragment fragment = new ProfileFragment(fragmentManager, POST_LIMIT);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("currentUser", post.getUser());
+        fragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment, "currentPost").commit();
     }
 }

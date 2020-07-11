@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,10 +37,13 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class PostDetailFragment extends Fragment {
 
     public static final String TAG = "PostDetailFragment";
     public static final int COMMENT_LIMIT = 20;
+    public static int POST_LIMIT = 20;
+    public static PostDetailFragment instance = null;
     private ParseUser currentUser = ParseUser.getCurrentUser();
 
     private TextView tvDetailUsername;
@@ -50,6 +54,8 @@ public class PostDetailFragment extends Fragment {
     private ImageView ivDetailProfilePicture;
     private ImageView ivDetailLike;
     private ImageView ivDetailComment;
+    private ConstraintLayout clDetailProfileContainer;
+
     private FragmentManager fragmentManager;
     private CommentsAdapter commentsAdapter;
     private RecyclerView rvComments;
@@ -63,6 +69,23 @@ public class PostDetailFragment extends Fragment {
 
     public PostDetailFragment(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        instance = this;
+    }
+
+    public static PostDetailFragment newInstance() {
+        PostDetailFragment postDetailFragment = new PostDetailFragment();
+        Bundle args = new Bundle();
+        postDetailFragment.setArguments(args);
+        return postDetailFragment;
+    }
+
+    public static PostDetailFragment getInstance(){
+        return instance;
     }
 
     @Override
@@ -86,6 +109,7 @@ public class PostDetailFragment extends Fragment {
         ivDetailProfilePicture = view.findViewById(R.id.ivDetailPostProfilePicture);
         ivDetailLike = view.findViewById(R.id.ivDetailLike);
         ivDetailComment = view.findViewById(R.id.ivDetailComment);
+        clDetailProfileContainer = view.findViewById(R.id.clDetailProfileContainer);
         rvComments = view.findViewById(R.id.rvComments);
 
         tvDetailUsername.setText(post.getUser().getUsername());
@@ -127,6 +151,21 @@ public class PostDetailFragment extends Fragment {
             ivDetailProfilePicture.setImageResource(R.drawable.ic_baseline_person_24);
         }
 
+        // When profile picture or username is clicked, go to that user's profile
+        clDetailProfileContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentManager = getFragmentManager();
+
+                Fragment fragment = new ProfileFragment(fragmentManager, POST_LIMIT);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("currentUser", post.getUser());
+                fragment.setArguments(bundle);
+
+                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+            }
+        });
+
         // Change liked icon whether liked or not
         ParseQuery<ParseObject> queryPosts = currentUser.getRelation("likedPosts").getQuery();
         queryPosts.whereEqualTo("objectId", post.getObjectId());
@@ -144,7 +183,7 @@ public class PostDetailFragment extends Fragment {
             }
         });
 
-        // Bind onClickListener to ivLike to increment/decrement like count and update post like count
+        // When click on like image, increments/decrements like count and updates post like count
         ivDetailLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,10 +213,18 @@ public class PostDetailFragment extends Fragment {
             }
         });
 
+        // When comment image is clicked, compose a new comment
         ivDetailComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goCommentDialogFragment();
+                fragmentManager = getFragmentManager();
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("post", post);
+
+                CommentDialogFragment commentDialogFragment = CommentDialogFragment.newInstance();
+                commentDialogFragment.setArguments(bundle);
+                commentDialogFragment.show(fragmentManager, "fragment_edit_name");
             }
         });
 
@@ -207,23 +254,17 @@ public class PostDetailFragment extends Fragment {
             }
         }, 250);
     }
-    private void goCommentDialogFragment() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("post", post);
 
-        CommentDialogFragment commentDialogFragment = CommentDialogFragment.newInstance("Some Title");
-        commentDialogFragment.setArguments(bundle);
-        commentDialogFragment.show(fragmentManager, "fragment_edit_name");
-    }
-
-    private void getPostComments() {
+    public void getPostComments() {
         post.getRelation("comments").getQuery()
                 .orderByDescending(Comment.KEY_CREATED_AT)
                 .include(Comment.KEY_USER)
                 .include(Comment.KEY_POST)
+                .setLimit(COMMENT_LIMIT)
                 .findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
+                        comments.clear();
                         if (e != null){
                             Log.e(TAG, "Error loading post comments", e);
                         }

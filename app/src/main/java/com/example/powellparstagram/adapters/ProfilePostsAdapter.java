@@ -17,18 +17,16 @@ import com.example.powellparstagram.R;
 import com.example.powellparstagram.fragments.PostDetailFragment;
 import com.example.powellparstagram.objects.Post;
 import com.parse.ParseFile;
-import com.parse.ParseUser;
 
 import java.util.List;
 
 public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapter.ViewHolder>{
 
-    public static final String TAG = "PostsAdapter";
+    public static final String TAG = "ProfilePostsAdapter";
 
     private Context context;
     private List<Post> posts;
     private FragmentManager fragmentManager;
-    private ParseUser currentUser = ParseUser.getCurrentUser();
 
     public ProfilePostsAdapter(Context context, List<Post> posts, FragmentManager fragmentManager) {
         this.context = context;
@@ -76,6 +74,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
                 ivProfilePostPicture.setImageResource(R.drawable.ic_baseline_person_24);
             }
 
+            // When a post picture is clicked on user profile, go to that post detail
             ivProfilePostPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

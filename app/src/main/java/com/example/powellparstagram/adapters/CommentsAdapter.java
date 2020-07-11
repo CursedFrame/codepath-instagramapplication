@@ -22,6 +22,8 @@ import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
+    public static final String TAG = "CommentsAdapter";
+
     List<Comment> comments;
     Context context;
 

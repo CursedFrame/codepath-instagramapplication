@@ -1,8 +1,8 @@
-# Project 4 - *Name of App Here*
+# Project 4 - *Powell-Parstagram*
 
-**Name of your app** is a photo sharing app using Parse as its backend.
+**Powell-Parstagram** is a photo sharing app using Parse as its backend.
 
-Time spent: **X** hours spent in total
+Time spent: **** hours spent in total
 
 ## User Stories
 
@@ -28,8 +28,8 @@ The following **stretch** features are implemented:
 - User Profiles:
   - [X] Allow the logged in user to add a profile photo
   - [X] Display the profile photo with each post
-  - [ ] Tapping on a post's username or profile photo goes to that user's profile page
-  - [ ] User Profile shows posts in a grid view
+  - [X] Tapping on a post's username or profile photo goes to that user's profile page
+  - [X] User Profile shows posts in a grid view
 - [X] User can comment on a post and see all comments for each post in the post details screen.
 - [X] User can like a post and see number of likes for each post in the post details screen.
 

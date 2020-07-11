@@ -14,6 +14,7 @@ import com.example.powellparstagram.fragments.ComposeFragment;
 import com.example.powellparstagram.fragments.PostsFragment;
 import com.example.powellparstagram.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,9 +49,14 @@ public class MainActivity extends AppCompatActivity {
                         menuItem.setIcon(R.drawable.ic_action_new_post);
                         break;
                     case R.id.action_profile:
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("currentUser", ParseUser.getCurrentUser());
                         fragment = new ProfileFragment(fragmentManager, POST_LIMIT);
+                        fragment.setArguments(bundle);
                         menuItem.setIcon(R.drawable.ic_action_profile);
-                        break;
+                        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                        return true;
+                        //break;
                     default:
                         break;
                 }

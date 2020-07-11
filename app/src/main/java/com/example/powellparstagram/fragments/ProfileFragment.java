@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,12 +43,14 @@ public class ProfileFragment extends Fragment {
     private RecyclerView rvPosts;
     private ImageView ivSettings;
     private ImageView ivProfilePicture;
+    private TextView tvProfileName;
     private SwipeRefreshLayout swipeRefreshContainerProfile;
     protected ProfilePostsAdapter profilePostsAdapter;
     protected List<Post> allPosts;
+    private ParseUser currentUser;
 
-    public ProfileFragment() {
-
+    public ProfileFragment(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
     }
 
     public ProfileFragment(FragmentManager fragmentManager, int postLimit) {
@@ -66,34 +69,48 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Bundle bundle = this.getArguments();
+        currentUser = bundle.getParcelable("currentUser");
+
+        tvProfileName = view.findViewById(R.id.tvProfileName);
+        tvProfileName.setText(currentUser.getUsername());
         ivSettings = view.findViewById(R.id.ivSettings);
-        ivSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu settingsMenu = new PopupMenu(getContext(), ivSettings);
-                settingsMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
-                            case R.id.action_change_profile_picture:
-                                goProfilePictureDialogFragment();
-                                return true;
-                            case R.id.action_log_out:
-                                ParseUser.logOut();
-                                ParseUser currentUser = ParseUser.getCurrentUser();
-                                goLoginActivity();
-                                return true;
+
+        // Iff the profile is the user's profile, show the settings icon
+        if (currentUser == ParseUser.getCurrentUser()) {
+            ivSettings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu settingsMenu = new PopupMenu(getContext(), ivSettings);
+                    settingsMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.action_change_profile_picture:
+                                    goProfilePictureDialogFragment();
+                                    return true;
+                                case R.id.action_log_out:
+                                    ParseUser.logOut();
+                                    ParseUser currentUser = ParseUser.getCurrentUser();
+                                    goLoginActivity();
+                                    return true;
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
-                settingsMenu.inflate(R.menu.menu_settings);
-                settingsMenu.show();
-            }
-        });
+                    });
+                    settingsMenu.inflate(R.menu.menu_settings);
+                    settingsMenu.show();
+                }
+            });
+        }
+        else {
+            ivSettings.setVisibility(View.GONE);
+        }
 
         ivProfilePicture = view.findViewById(R.id.ivProfileImage);
-        ParseFile image = ParseUser.getCurrentUser().getParseFile("profileImage");
+
+        // Bind profile image
+        ParseFile image = currentUser.getParseFile("profileImage");
         Glide.with(getContext())
                 .load(image.getUrl())
                 .transform(new CircleCrop())
@@ -126,7 +143,7 @@ public class ProfileFragment extends Fragment {
         // Specify which class to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Post.KEY_USER, currentUser);
         query.setLimit(POST_LIMIT);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
@@ -159,8 +176,8 @@ public class ProfileFragment extends Fragment {
 
     private void refreshProfile() throws ParseException {
         // Refresh user data
-        ParseUser.getCurrentUser().fetch();
-        ParseFile image = ParseUser.getCurrentUser().getParseFile("profileImage");
+        currentUser.fetch();
+        ParseFile image = currentUser.getParseFile("profileImage");
         Glide.with(getContext())
                 .load(image.getUrl())
                 .transform(new CircleCrop())

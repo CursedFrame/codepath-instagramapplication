@@ -24,17 +24,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Fragment fragment = new LoginFragment();
-
-        fragmentManager.beginTransaction().replace(R.id.clContainer, fragment).commit();
-
         ivBackgroundLogin = findViewById(R.id.ivBackgroundLogin);
+
+        Fragment fragment = new LoginFragment();
+        fragmentManager.beginTransaction().replace(R.id.clContainer, fragment).commit();
 
         Glide.with(this)
                 .asGif()
                 .load(R.drawable.background)
                 .into(ivBackgroundLogin);
-
     }
 
     public void goMainActivity() {

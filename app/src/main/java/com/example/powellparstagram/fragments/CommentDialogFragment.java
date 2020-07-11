@@ -2,7 +2,9 @@ package com.example.powellparstagram.fragments;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.powellparstagram.R;
@@ -34,10 +37,9 @@ public class CommentDialogFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static CommentDialogFragment newInstance(String title) {
+    public static CommentDialogFragment newInstance() {
         CommentDialogFragment frag = new CommentDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", title);
         frag.setArguments(args);
         return frag;
     }
@@ -62,7 +64,9 @@ public class CommentDialogFragment extends DialogFragment {
         btnComment = view.findViewById(R.id.btnComment);
         etComment = view.findViewById(R.id.etComment);
 
+        // When comment button is clicked, post comment and refresh post comments
         btnComment.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onClick(View v) {
                 final Comment comment = new Comment();
@@ -81,10 +85,17 @@ public class CommentDialogFragment extends DialogFragment {
                         post.saveInBackground();
                     }
                 });
+
+                // Delays getPostComments() until there is enough time for comments callback to occur
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        PostDetailFragment.getInstance().getPostComments();
+                    }
+                }, 250);
                 dismiss();
             }
         });
-
-
     }
 }
