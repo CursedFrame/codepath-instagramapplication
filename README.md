@@ -37,7 +37,7 @@ The following **stretch** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-![App Demo Link](CodePathInstagramApp/screenshots/instagram_app.gif)
+![App Demo Link](screenshots/instagram_app.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
