@@ -78,7 +78,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
             ivProfilePostPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Fragment fragment = new PostDetailFragment(fragmentManager);
+                    Fragment fragment = new PostDetailFragment();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("post", post);
                     fragment.setArguments(bundle);

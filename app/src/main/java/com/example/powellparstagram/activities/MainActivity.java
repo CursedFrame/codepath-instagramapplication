@@ -19,7 +19,6 @@ import com.parse.ParseUser;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
-    public static final int POST_LIMIT = 20;
 
     private BottomNavigationView bottomNavigationView;
     final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = null;
                 switch (menuItem.getItemId()) {
                     case R.id.action_home:
-                        fragment = new PostsFragment(fragmentManager, POST_LIMIT);
+                        fragment = new PostsFragment(fragmentManager);
                         menuItem.setIcon(R.drawable.ic_action_home);
                         break;
                     case R.id.action_compose:
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_profile:
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("currentUser", ParseUser.getCurrentUser());
-                        fragment = new ProfileFragment(fragmentManager, POST_LIMIT);
+                        fragment = new ProfileFragment(fragmentManager);
                         fragment.setArguments(bundle);
                         menuItem.setIcon(R.drawable.ic_action_profile);
                         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();

@@ -1,5 +1,6 @@
 package com.example.powellparstagram.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -22,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.adapters.CommentsAdapter;
+import com.example.powellparstagram.interfaces.GlobalConstant;
 import com.example.powellparstagram.objects.Comment;
 import com.example.powellparstagram.objects.Post;
 import com.parse.FindCallback;
@@ -41,8 +44,6 @@ import java.util.List;
 public class PostDetailFragment extends Fragment {
 
     public static final String TAG = "PostDetailFragment";
-    public static final int COMMENT_LIMIT = 20;
-    public static int POST_LIMIT = 20;
     public static PostDetailFragment instance = null;
     private ParseUser currentUser = ParseUser.getCurrentUser();
 
@@ -56,7 +57,7 @@ public class PostDetailFragment extends Fragment {
     private ImageView ivDetailComment;
     private ConstraintLayout clDetailProfileContainer;
 
-    private FragmentManager fragmentManager;
+    private FragmentManager fragmentManager = getFragmentManager();
     private CommentsAdapter commentsAdapter;
     private RecyclerView rvComments;
     private List<Comment> comments;
@@ -65,10 +66,6 @@ public class PostDetailFragment extends Fragment {
 
     public PostDetailFragment(){
 
-    }
-
-    public PostDetailFragment(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
     }
 
     @Override
@@ -95,6 +92,7 @@ public class PostDetailFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_post_detail, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -157,7 +155,7 @@ public class PostDetailFragment extends Fragment {
             public void onClick(View v) {
                 fragmentManager = getFragmentManager();
 
-                Fragment fragment = new ProfileFragment(fragmentManager, POST_LIMIT);
+                Fragment fragment = new ProfileFragment(fragmentManager);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("currentUser", post.getUser());
                 fragment.setArguments(bundle);
@@ -260,7 +258,7 @@ public class PostDetailFragment extends Fragment {
                 .orderByDescending(Comment.KEY_CREATED_AT)
                 .include(Comment.KEY_USER)
                 .include(Comment.KEY_POST)
-                .setLimit(COMMENT_LIMIT)
+                .setLimit(GlobalConstant.COMMENT_LIMIT)
                 .findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {

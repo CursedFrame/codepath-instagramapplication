@@ -35,7 +35,6 @@ import java.util.List;
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     public static final String TAG = "PostsAdapter";
-    public static final int POST_LIMIT = 20;
     private Context context;
     private List<Post> posts;
     private FragmentManager fragmentManager;
@@ -219,7 +218,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     private void goUserProfile(Post post){
-        Fragment fragment = new ProfileFragment(fragmentManager, POST_LIMIT);
+        Fragment fragment = new ProfileFragment(fragmentManager);
         Bundle bundle = new Bundle();
         bundle.putParcelable("currentUser", post.getUser());
         fragment.setArguments(bundle);

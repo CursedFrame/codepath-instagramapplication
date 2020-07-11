@@ -24,6 +24,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.activities.LoginActivity;
 import com.example.powellparstagram.adapters.ProfilePostsAdapter;
+import com.example.powellparstagram.interfaces.GlobalConstant;
 import com.example.powellparstagram.objects.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -37,7 +38,6 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = "ProfileFragment";
-    private int POST_LIMIT;
 
     private FragmentManager fragmentManager;
     private RecyclerView rvPosts;
@@ -51,11 +51,6 @@ public class ProfileFragment extends Fragment {
 
     public ProfileFragment(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
-    }
-
-    public ProfileFragment(FragmentManager fragmentManager, int postLimit) {
-        this.fragmentManager = fragmentManager;
-        this.POST_LIMIT = postLimit;
     }
 
     @Override
@@ -111,12 +106,16 @@ public class ProfileFragment extends Fragment {
 
         // Bind profile image
         ParseFile image = currentUser.getParseFile("profileImage");
-        Glide.with(getContext())
-                .load(image.getUrl())
-                .transform(new CircleCrop())
-                .placeholder(R.drawable.ic_baseline_person_24)
-                .into(ivProfilePicture);
-
+        if (image != null) {
+            Glide.with(getContext())
+                    .load(image.getUrl())
+                    .transform(new CircleCrop())
+                    .placeholder(R.drawable.ic_baseline_person_24)
+                    .into(ivProfilePicture);
+        }
+        else {
+            ivProfilePicture.setImageResource(R.drawable.ic_baseline_person_24);
+        }
         swipeRefreshContainerProfile = view.findViewById(R.id.scProfile);
         swipeRefreshContainerProfile.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -144,7 +143,7 @@ public class ProfileFragment extends Fragment {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.whereEqualTo(Post.KEY_USER, currentUser);
-        query.setLimit(POST_LIMIT);
+        query.setLimit(GlobalConstant.POST_LIMIT);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
             @Override

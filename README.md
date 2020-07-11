@@ -2,7 +2,7 @@
 
 **Powell-Parstagram** is a photo sharing app using Parse as its backend.
 
-Time spent: **** hours spent in total
+Time spent: **35** hours spent in total
 
 ## User Stories
 
@@ -24,7 +24,7 @@ The following **stretch** features are implemented:
 - [X] User should switch between different tabs - viewing all posts (feed view), capture (camera and photo gallery view) and profile tabs (posts made) using fragments and a Bottom Navigation View.
 - [X] User can load more posts once he or she reaches the bottom of the feed using endless scrolling.
 - [ ] Show the username and creation time for each post
-- [ ] After the user submits a new post, show an indeterminate progress bar while the post is being uploaded to Parse
+- [X] After the user submits a new post, show an indeterminate progress bar while the post is being uploaded to Parse
 - User Profiles:
   - [X] Allow the logged in user to add a profile photo
   - [X] Display the profile photo with each post
@@ -33,20 +33,11 @@ The following **stretch** features are implemented:
 - [X] User can comment on a post and see all comments for each post in the post details screen.
 - [X] User can like a post and see number of likes for each post in the post details screen.
 
-The following **additional** features are implemented:
-
-- [ ] List anything else that you can get done to improve the app functionality!
-
-Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
-
-1.
-2.
-
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![App Demo Link](CodePathInstagramApp/screenshots/instagram_app.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -59,11 +50,24 @@ List an 3rd party libraries, icons, graphics, or other assets you used in your a
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Describe any challenges encountered while building the app:
+
+    - Most of the programming went well during this app creation, but on the final day,
+        the ceiling at my entryway caved, so I had to spend most of my last day cleaning
+        and moving into a friend's home. Luckily, I had spent extra time after hours and
+        got ahead of the MVP goals by the middle of the week, so I was not missing much
+        and was able to finish most of the stretch goals by the original deadline
+    - Getting the relative date timestamp to work was a pain and cost me a few hours of
+        Googling and troubleshooting but didn't get it to work. I decided to move on to 
+        another stretch goal
+    - Spent a lot of time cleaning up code, and what I thought was harmless cleaning
+        actually broke my code at one point, so that was a minor challenge I had to deal
+        with.
+         
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright 2020 Nicholas Powell
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

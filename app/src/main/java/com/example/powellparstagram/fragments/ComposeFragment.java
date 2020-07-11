@@ -14,12 +14,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.objects.Post;
@@ -37,11 +39,13 @@ public class ComposeFragment extends Fragment {
     public static final String TAG = "ComposeFragment";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
 
+    private FragmentManager fragmentManager = getFragmentManager();
     private Button btnCamera;
     private Button btnSubmitPost;
     private EditText etDescription;
     private ImageView ivPicture;
     private File photoFile;
+    private ProgressBar progressBar;
     public String photoFileName = "photo.jpg";
 
     public ComposeFragment() {
@@ -62,6 +66,7 @@ public class ComposeFragment extends Fragment {
         btnSubmitPost = view.findViewById(R.id.btnSubmitPost);
         etDescription = view.findViewById(R.id.etDescription);
         ivPicture = view.findViewById(R.id.ivPicture);
+        progressBar = view.findViewById(R.id.pbLoading);
 
         // When submit button is clicked, save the new post
         btnSubmitPost.setOnClickListener(new View.OnClickListener() {
@@ -71,13 +76,16 @@ public class ComposeFragment extends Fragment {
                 if (description.isEmpty()){
                     Toast.makeText(getContext(), "Description cannot be empty", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                if (photoFile == null || ivPicture.getDrawable() == null){
+                } else if (photoFile == null || ivPicture.getDrawable() == null){
                     Toast.makeText(getContext(), "There is no image!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                savePost(description, currentUser, photoFile);
+                else {
+                    progressBar.bringToFront();
+                    progressBar.setVisibility(View.VISIBLE);
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    savePost(description, currentUser, photoFile);
+                }
             }
         });
 
@@ -131,6 +139,10 @@ public class ComposeFragment extends Fragment {
                 Log.i(TAG, "Post saved successfully!");
                 etDescription.setText("");
                 ivPicture.setImageResource(0);
+                progressBar.setVisibility(View.INVISIBLE);
+
+                Fragment fragment = new PostsFragment(fragmentManager);
+                getFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).commit();
             }
         });
     }

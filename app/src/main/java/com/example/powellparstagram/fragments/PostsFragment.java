@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.powellparstagram.R;
 import com.example.powellparstagram.adapters.PostsAdapter;
+import com.example.powellparstagram.interfaces.GlobalConstant;
 import com.example.powellparstagram.listeners.EndlessRecyclerViewScrollListener;
 import com.example.powellparstagram.objects.Post;
 import com.parse.FindCallback;
@@ -29,7 +30,6 @@ import java.util.List;
 public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
-    private int POST_LIMIT;
     private Date lastPostDate;
 
     private FragmentManager fragmentManager;
@@ -40,13 +40,8 @@ public class PostsFragment extends Fragment {
     protected PostsAdapter postsAdapter;
     protected List<Post> allPosts;
 
-    public PostsFragment() {
-        // Required empty public constructor
-    }
-
-    public PostsFragment(FragmentManager fragmentManager, int postLimit) {
+    public PostsFragment(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
-        this.POST_LIMIT = postLimit;
     }
 
     @Override
@@ -96,7 +91,7 @@ public class PostsFragment extends Fragment {
     private void loadMorePosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(POST_LIMIT);
+        query.setLimit(GlobalConstant.POST_LIMIT);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.whereLessThan("createdAt", lastPostDate);
         query.findInBackground(new FindCallback<Post>() {
@@ -121,7 +116,7 @@ public class PostsFragment extends Fragment {
         // Specify which class to query
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.setLimit(POST_LIMIT);
+        query.setLimit(GlobalConstant.POST_LIMIT);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Post>() {
             @Override
