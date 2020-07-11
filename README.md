@@ -39,6 +39,10 @@ Here's a walkthrough of implemented user stories:
 
 ![App Demo Link](screenshots/instagram_app.gif)
 
+Video with clearer login persistence across app restarts:
+
+![App Demo Link](screenshots/instagram_user_persistence.gif)
+
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Credits
